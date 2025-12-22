@@ -32,6 +32,11 @@ export default function VoteButton({
   const [hasVoted, setHasVoted] = useState(false);
   const [isThisOptionVoted, setIsThisOptionVoted] = useState(false);
 
+  // Sync votes state when initialVotes prop changes (after router.refresh)
+  useEffect(() => {
+    setVotes(initialVotes);
+  }, [initialVotes]);
+
   // Check localStorage on mount to see if user has voted for this debate
   useEffect(() => {
     const checkVoteStatus = () => {
@@ -94,17 +99,18 @@ export default function VoteButton({
         
         if (isVoteChange) {
           // Vote was changed from another option
+          // Don't increment locally - let router.refresh() update from server
           toast.success("Vote changed successfully!");
         } else {
-          // New vote or clicked same option again
+          // New vote - safe to increment locally
           if (data.message) {
             // Clicked same option - already voted
             return;
           }
+          setVotes((prev) => prev + 1);
           toast.success("Vote recorded");
         }
 
-        setVotes((prev) => prev + 1);
         setHasVoted(true);
         setIsThisOptionVoted(true);
         
