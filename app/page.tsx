@@ -162,7 +162,7 @@ export default async function Home() {
 
       {/* Categories Preview */}
       <section 
-        className="max-w-6xl mx-auto px-6"
+        className="max-w-6xl mx-auto px-2 sm:px-4 md:px-6"
         style={{ paddingTop: 'var(--space-3xl)' }}
       >
         <div className="flex items-center mb-8">

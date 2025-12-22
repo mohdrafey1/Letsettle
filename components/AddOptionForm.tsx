@@ -64,7 +64,7 @@ export default function AddOptionForm({ debateId, isMoreOptionAllowed = true }: 
       >
         Add your option
       </h3>
-      <div className="flex gap-3">
+      <div className="flex flex-wrap items-center justify-center gap-3">
         <input
           type="text"
           placeholder="Suggest a new option..."

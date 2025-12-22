@@ -69,16 +69,16 @@ export default async function AllDebatesPage() {
 
       {/* All Debates Grid */}
       <section 
-        className="max-w-6xl mx-auto px-6"
+        className="max-w-6xl mx-auto px-2 sm:px-4 md:px-6"
         style={{ paddingTop: 'var(--space-3xl)' }}
       >
         <div className="flex items-center mb-8">
           <div>
             <h2 
-              className="font-bold mb-2"
+              className="font-bold mb-2 text-base sm:text-xl"
               style={{ 
                 color: 'var(--color-text-primary)',
-                fontSize: 'var(--font-size-2xl)'
+             
               }}
             >
               {debates.length} Active Debates
@@ -93,10 +93,17 @@ export default async function AllDebatesPage() {
           </div>
           <Link 
             href="/" 
-            className="ml-auto text-sm font-medium hover:opacity-70 transition-opacity"
+            className="hidden sm:block ml-auto text-sm font-medium hover:opacity-70 transition-opacity"
             style={{ color: 'var(--color-text-secondary)' }}
           >
             ← Back to Home
+          </Link>
+            <Link 
+            href="/" 
+            className="sm:hidden ml-auto text-sm font-medium hover:opacity-70 transition-opacity"
+            style={{ color: 'var(--color-text-secondary)' }}
+          >
+            ← Back
           </Link>
         </div>
 

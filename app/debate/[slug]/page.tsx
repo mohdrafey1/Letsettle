@@ -3,6 +3,7 @@ import Debate from '@/models/Debate';
 import Option from '@/models/Option';
 import VoteButton from '@/components/VoteButton';
 import AddOptionForm from '@/components/AddOptionForm';
+import ShareButton from '@/components/ShareButton';
 import { notFound } from 'next/navigation';
 import { Metadata } from 'next';
 
@@ -41,7 +42,7 @@ export default async function DebatePage({ params }: PageProps) {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-6 py-12">
+    <div className="max-w-4xl mx-auto px-4 sm:px-6 py-12">
       {/* Header */}
       <div className="mb-12">
         <div 
@@ -77,18 +78,24 @@ export default async function DebatePage({ params }: PageProps) {
         )}
         
         <div 
-          className="mt-6 flex items-center gap-3 text-sm font-mono-numbers"
-          style={{ color: 'var(--color-text-tertiary)' }}
+          className="mt-6 flex flex-wrap items-center justify-between gap-4"
         >
-          <span>{debate.totalVotes} votes</span>
-          <span>·</span>
-          <span>Live results</span>
+          <div 
+            className="flex items-center gap-3 text-sm font-mono-numbers"
+            style={{ color: 'var(--color-text-tertiary)' }}
+          >
+            <span>{debate.totalVotes} votes</span>
+            <span>·</span>
+            <span>Live results</span>
+          </div>
+          
+          <ShareButton title={debate.title} slug={params.slug} />
         </div>
       </div>
 
       {/* Options List */}
       <div 
-        className="p-8 mb-8"
+        className="p-4 sm:p-8 mb-4 sm:mb-8"
         style={{
           backgroundColor: 'var(--color-base-surface)',
           border: '1px solid var(--color-base-border)',

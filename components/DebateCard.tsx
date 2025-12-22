@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import VoteButton from './VoteButton';
+import ShareButton from './ShareButton';
 import { Debate } from '@/lib/types';
 
 export default function DebateCard({ debate }: { debate: Debate }) { 
@@ -27,28 +28,45 @@ export default function DebateCard({ debate }: { debate: Debate }) {
             </>
           )}
         </div>
-        <div 
-          className="text-sm font-mono-numbers"
-          style={{ color: 'var(--color-text-tertiary)' }}
-        >
-          {d.totalVotes}
+        <div className="flex items-center gap-3">
+          <div 
+            className="text-sm font-mono-numbers"
+            style={{ color: 'var(--color-text-tertiary)' }}
+          >
+            {d.totalVotes}
+          </div>
+          <ShareButton title={d.title} slug={d.slug} />
         </div>
       </div>
 
       <Link href={`/debate/${d.slug}`} className="block group mb-6">
-        <h3 
-          className="font-medium leading-tight group-hover:opacity-70 transition-opacity"
-          style={{ 
-            color: 'var(--color-text-primary)',
-            fontSize: 'var(--font-size-xl)'
-          }}
-        >
-          {d.title}
-        </h3>
+        <div className="flex items-start gap-2">
+          <h3 
+            className="flex-1 font-medium leading-tight transition-all"
+            style={{ 
+              color: 'var(--color-text-primary)',
+              fontSize: 'var(--font-size-xl)'
+            }}
+          >
+            <span className="group-hover:underline decoration-2 underline-offset-4 decoration-[var(--color-accent)]">
+              {d.title}
+            </span>
+          </h3>
+          {/* Arrow indicator that appears on hover */}
+          <svg 
+            className="w-5 h-5 mt-1 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" 
+            style={{ color: 'var(--color-accent)' }}
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+          </svg>
+        </div>
       </Link>
 
       <div className="space-y-3">
-        {d.options.slice(0, 3).map((opt) => (
+        {d.options.slice(0, 3).map((opt, idx) => (
           <VoteButton
             key={opt._id.toString()}
             debateId={d._id.toString()}
@@ -56,6 +74,7 @@ export default function DebateCard({ debate }: { debate: Debate }) {
             optionName={opt.name}
             initialVotes={opt.votes}
             totalVotes={d.totalVotes}
+            index={idx}
           />
         ))}
       </div>
@@ -71,6 +90,25 @@ export default function DebateCard({ debate }: { debate: Debate }) {
           </Link>
         </div>
       )}
+
+      {/* View Full Debate Button */}
+      <div className="mt-4 pt-4" style={{ borderTop: '1px solid var(--color-base-border)' }}>
+        <Link 
+          href={`/debate/${d.slug}`}
+          className="flex items-center justify-center gap-2 text-sm font-medium transition-opacity hover:opacity-70 group/btn"
+          style={{ color: 'var(--color-accent)' }}
+        >
+          <span>View Full Debate</span>
+          <svg 
+            className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" 
+            fill="none" 
+            viewBox="0 0 24 24" 
+            stroke="currentColor"
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 7l5 5m0 0l-5 5m5-5H6" />
+          </svg>
+        </Link>
+      </div>
     </div>
   );
 }
