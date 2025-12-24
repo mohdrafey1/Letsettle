@@ -39,7 +39,7 @@ export default async function Home() {
         <div className="pb-20" style={{ paddingTop: "var(--space-3xl)" }}>
             {/* Hero Section - Minimal & Calm */}
             <section
-                className="py-16 px-6 text-center"
+                className="pt-8 pb-16 px-6 text-center"
                 style={{
                     backgroundColor: "var(--color-base-bg)",
                     borderBottom: "1px solid var(--color-base-border)",
@@ -75,7 +75,7 @@ export default async function Home() {
                         </p>
 
                         {/* Search Bar */}
-                        <div className="max-w-md relative group">
+                        {/* <div className="max-w-md relative group">
                             <div
                                 className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none"
                                 style={{ color: "var(--color-text-tertiary)" }}
@@ -106,7 +106,7 @@ export default async function Home() {
                                     fontSize: "var(--font-size-base)",
                                 }}
                             />
-                        </div>
+                        </div> */}
 
                         <div className="pt-2 flex items-center gap-6">
                             <Link

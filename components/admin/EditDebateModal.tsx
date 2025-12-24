@@ -74,7 +74,7 @@ export default function EditDebateModal({
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50 overflow-y-auto">
             <div className="bg-white rounded-xl p-6 max-w-2xl w-full my-8">
-                <div className="flex items-center justify-between mb-6">
+                {/* <div className="flex items-center justify-between mb-6">
                     <h2 className="text-2xl font-bold text-gray-900">
                         Edit Debate
                     </h2>
@@ -84,7 +84,7 @@ export default function EditDebateModal({
                     >
                         <X size={20} />
                     </button>
-                </div>
+                </div> */}
 
                 <form onSubmit={handleSubmit} className="space-y-5">
                     {/* Slug (Read-only) */}

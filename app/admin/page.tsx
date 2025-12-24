@@ -1,7 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { TrendingUp, Clock, CheckCircle, XCircle } from "lucide-react";
+import {
+    TrendingUp,
+    Clock,
+    CheckCircle,
+    XCircle,
+    ArrowRight,
+} from "lucide-react";
 import { toast } from "sonner";
 
 interface Stats {
@@ -9,6 +15,21 @@ interface Stats {
     pending: number;
     approved: number;
     rejected: number;
+}
+
+// Skeleton loader component
+function StatCardSkeleton() {
+    return (
+        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 animate-pulse">
+            <div className="flex items-center justify-between">
+                <div className="flex-1">
+                    <div className="h-4 bg-gray-200 rounded w-24 mb-3"></div>
+                    <div className="h-8 bg-gray-200 rounded w-16"></div>
+                </div>
+                <div className="w-14 h-14 bg-gray-200 rounded-xl"></div>
+            </div>
+        </div>
+    );
 }
 
 export default function AdminDashboard() {
@@ -67,118 +88,152 @@ export default function AdminDashboard() {
             label: "Total Debates",
             value: stats.total,
             icon: TrendingUp,
-            color: "blue",
+            gradient: "from-blue-500 to-blue-600",
+            iconBg: "bg-blue-500/10",
+            iconColor: "text-blue-600",
         },
         {
-            label: "Pending",
+            label: "Pending Review",
             value: stats.pending,
             icon: Clock,
-            color: "yellow",
+            gradient: "from-amber-500 to-orange-600",
+            iconBg: "bg-amber-500/10",
+            iconColor: "text-amber-600",
         },
         {
             label: "Approved",
             value: stats.approved,
             icon: CheckCircle,
-            color: "green",
+            gradient: "from-emerald-500 to-green-600",
+            iconBg: "bg-emerald-500/10",
+            iconColor: "text-emerald-600",
         },
         {
             label: "Rejected",
             value: stats.rejected,
             icon: XCircle,
-            color: "red",
+            gradient: "from-rose-500 to-red-600",
+            iconBg: "bg-rose-500/10",
+            iconColor: "text-rose-600",
         },
     ];
 
-    const colorStyles: Record<string, string> = {
-        blue: "bg-blue-100 text-blue-600",
-        yellow: "bg-yellow-100 text-yellow-600",
-        green: "bg-green-100 text-green-600",
-        red: "bg-red-100 text-red-600",
-    };
+    const quickActions = [
+        {
+            title: "Review Pending",
+            description: `${stats.pending} debates waiting for review`,
+            href: "/admin/pending",
+            gradient: "from-amber-500 to-orange-600",
+            hoverGradient: "hover:from-amber-600 hover:to-orange-700",
+            icon: Clock,
+        },
+        {
+            title: "All Debates",
+            description: "View and manage all debates",
+            href: "/admin/debates",
+            gradient: "from-blue-500 to-blue-600",
+            hoverGradient: "hover:from-blue-600 hover:to-blue-700",
+            icon: TrendingUp,
+        },
+        {
+            title: "Manage Options",
+            description: "View all voting options",
+            href: "/admin/options",
+            gradient: "from-purple-500 to-purple-600",
+            hoverGradient: "hover:from-purple-600 hover:to-purple-700",
+            icon: CheckCircle,
+        },
+    ];
 
     return (
-        <div>
+        <div className="max-w-7xl mx-auto">
+            {/* Header */}
             <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-900">
-                    Admin Dashboard
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
+                    Dashboard Overview
                 </h1>
-                <p className="text-gray-500 mt-1">
-                    Content moderation overview
+                <p className="text-gray-600 text-sm md:text-base">
+                    Monitor and manage your content moderation
                 </p>
             </div>
 
-            {loading ? (
-                <div className="text-gray-500">Loading stats...</div>
-            ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                    {statCards.map((stat) => {
+            {/* Stats Grid */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
+                {loading ? (
+                    <>
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                        <StatCardSkeleton />
+                    </>
+                ) : (
+                    statCards.map((stat) => {
                         const Icon = stat.icon;
                         return (
                             <div
                                 key={stat.label}
-                                className="bg-white rounded-xl shadow-sm border border-gray-100 p-6"
+                                className="group bg-white rounded-2xl shadow-lg hover:shadow-xl border border-gray-100 p-6 transition-all duration-300 hover:-translate-y-1"
                             >
-                                <div className="flex items-center justify-between">
-                                    <div>
-                                        <p className="text-gray-500 text-sm">
-                                            {stat.label}
-                                        </p>
-                                        <p className="text-3xl font-bold text-gray-900 mt-2">
-                                            {stat.value}
-                                        </p>
-                                    </div>
+                                <div className="flex items-start justify-between mb-4">
                                     <div
-                                        className={`p-3 rounded-lg ${
-                                            colorStyles[stat.color]
-                                        }`}
+                                        className={`p-3 rounded-xl ${stat.iconBg} transition-transform group-hover:scale-110`}
                                     >
-                                        <Icon size={24} />
+                                        <Icon
+                                            className={`w-6 h-6 ${stat.iconColor}`}
+                                        />
                                     </div>
+                                </div>
+                                <div>
+                                    <p className="text-gray-600 text-sm font-medium mb-1">
+                                        {stat.label}
+                                    </p>
+                                    <p
+                                        className={`text-4xl font-bold bg-gradient-to-r ${stat.gradient} bg-clip-text text-transparent`}
+                                    >
+                                        {stat.value}
+                                    </p>
                                 </div>
                             </div>
                         );
-                    })}
-                </div>
-            )}
+                    })
+                )}
+            </div>
 
-            <div className="mt-8 bg-white rounded-xl shadow-sm border border-gray-100 p-6">
-                <h2 className="text-xl font-bold text-gray-900 mb-4">
-                    Quick Actions
-                </h2>
+            {/* Quick Actions */}
+            <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 md:p-8">
+                <div className="flex items-center justify-between mb-6">
+                    <h2 className="text-xl md:text-2xl font-bold text-gray-900">
+                        Quick Actions
+                    </h2>
+                </div>
+
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <a
-                        href="/admin/pending"
-                        className="p-4 border-2 border-yellow-200 rounded-lg hover:bg-yellow-50 transition-colors"
-                    >
-                        <h3 className="font-semibold text-gray-900">
-                            Review Pending
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-1">
-                            {stats.pending} debates waiting
-                        </p>
-                    </a>
-                    <a
-                        href="/admin/debates"
-                        className="p-4 border-2 border-blue-200 rounded-lg hover:bg-blue-50 transition-colors"
-                    >
-                        <h3 className="font-semibold text-gray-900">
-                            Manage All Debates
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-1">
-                            View and edit debates
-                        </p>
-                    </a>
-                    <a
-                        href="/admin/options"
-                        className="p-4 border-2 border-gray-200 rounded-lg hover:bg-gray-50 transition-colors"
-                    >
-                        <h3 className="font-semibold text-gray-900">
-                            Manage Options
-                        </h3>
-                        <p className="text-sm text-gray-500 mt-1">
-                            View all voting options
-                        </p>
-                    </a>
+                    {quickActions.map((action) => {
+                        const Icon = action.icon;
+                        return (
+                            <a
+                                key={action.title}
+                                href={action.href}
+                                className={`group relative overflow-hidden bg-gradient-to-r ${action.gradient} ${action.hoverGradient} rounded-xl p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1`}
+                            >
+                                <div className="relative z-10">
+                                    <div className="flex items-center justify-between mb-3">
+                                        <Icon className="w-8 h-8 text-white" />
+                                        <ArrowRight className="w-5 h-5 text-white/80 group-hover:translate-x-1 transition-transform" />
+                                    </div>
+                                    <h3 className="text-white font-bold text-lg mb-1">
+                                        {action.title}
+                                    </h3>
+                                    <p className="text-white/90 text-sm">
+                                        {action.description}
+                                    </p>
+                                </div>
+
+                                {/* Decorative gradient overlay */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-white/0 to-white/10 opacity-0 group-hover:opacity-100 transition-opacity"></div>
+                            </a>
+                        );
+                    })}
                 </div>
             </div>
         </div>

@@ -5,6 +5,7 @@ import { Search, Edit2, Trash2, Eye } from "lucide-react";
 import { toast } from "sonner";
 import StatusBadge from "@/components/admin/StatusBadge";
 import EditDebateModal from "@/components/admin/EditDebateModal";
+import { useRouter, useSearchParams } from "next/navigation";
 
 interface Debate {
     _id: string;
@@ -23,18 +24,41 @@ interface Debate {
 }
 
 export default function AllDebatesPage() {
+    const router = useRouter();
+    const searchParams = useSearchParams();
     const [debates, setDebates] = useState<Debate[]>([]);
     const [editingDebate, setEditingDebate] = useState<Debate | null>(null);
     const [loading, setLoading] = useState(true);
-    const [search, setSearch] = useState("");
-    const [statusFilter, setStatusFilter] = useState("all");
-    const [currentPage, setCurrentPage] = useState(1);
+    const [search, setSearch] = useState(searchParams.get("search") || "");
+    const [statusFilter, setStatusFilter] = useState(
+        searchParams.get("status") || "all"
+    );
+    const [currentPage, setCurrentPage] = useState(
+        parseInt(searchParams.get("page") || "1")
+    );
     const [totalPages, setTotalPages] = useState(1);
     const [total, setTotal] = useState(0);
 
+    // Update URL when filters change
+    const updateURL = (
+        newSearch: string,
+        newStatus: string,
+        newPage: number
+    ) => {
+        const params = new URLSearchParams();
+        if (newSearch) params.set("search", newSearch);
+        if (newStatus !== "all") params.set("status", newStatus);
+        if (newPage > 1) params.set("page", newPage.toString());
+
+        const queryString = params.toString();
+        router.push(`/admin/debates${queryString ? `?${queryString}` : ""}`, {
+            scroll: false,
+        });
+    };
+
     useEffect(() => {
         fetchDebates();
-    }, [statusFilter, currentPage]);
+    }, [statusFilter, currentPage, search]);
 
     const fetchDebates = async () => {
         try {
@@ -62,8 +86,21 @@ export default function AllDebatesPage() {
 
     const handleSearch = (e: React.FormEvent) => {
         e.preventDefault();
-        setCurrentPage(1); // Reset to first page on search
-        fetchDebates();
+        const newPage = 1;
+        setCurrentPage(newPage);
+        updateURL(search, statusFilter, newPage);
+    };
+
+    const handleStatusChange = (newStatus: string) => {
+        setStatusFilter(newStatus);
+        const newPage = 1;
+        setCurrentPage(newPage);
+        updateURL(search, newStatus, newPage);
+    };
+
+    const handlePageChange = (newPage: number) => {
+        setCurrentPage(newPage);
+        updateURL(search, statusFilter, newPage);
     };
 
     const handleDelete = async (id: string) => {
@@ -118,7 +155,7 @@ export default function AllDebatesPage() {
 
                     <select
                         value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value)}
+                        onChange={(e) => handleStatusChange(e.target.value)}
                         className="px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none bg-white"
                     >
                         <option value="all">All Statuses</option>
@@ -242,7 +279,7 @@ export default function AllDebatesPage() {
                     <div className="flex gap-2">
                         <button
                             onClick={() =>
-                                setCurrentPage((prev) => Math.max(1, prev - 1))
+                                handlePageChange(Math.max(1, currentPage - 1))
                             }
                             disabled={currentPage === 1}
                             className="px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
@@ -254,8 +291,8 @@ export default function AllDebatesPage() {
                         </span>
                         <button
                             onClick={() =>
-                                setCurrentPage((prev) =>
-                                    Math.min(totalPages, prev + 1)
+                                handlePageChange(
+                                    Math.min(totalPages, currentPage + 1)
                                 )
                             }
                             disabled={currentPage === totalPages}

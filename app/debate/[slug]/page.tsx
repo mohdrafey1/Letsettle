@@ -4,6 +4,7 @@ import Option from "@/models/Option";
 import VoteButton from "@/components/VoteButton";
 import AddOptionForm from "@/components/AddOptionForm";
 import ShareButton from "@/components/ShareButton";
+import AdminEditButton from "@/components/AdminEditButton";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { formatDistanceToNow } from "date-fns";
@@ -101,7 +102,10 @@ export default async function DebatePage({ params }: PageProps) {
                         <span>Live results</span>
                     </div>
 
-                    <ShareButton title={debate.title} slug={params.slug} />
+                    <div className="flex items-center gap-2">
+                        <AdminEditButton debateTitle={debate.title} />
+                        <ShareButton title={debate.title} slug={params.slug} />
+                    </div>
                 </div>
             </div>
 
@@ -125,29 +129,15 @@ export default async function DebatePage({ params }: PageProps) {
                 </h2>
                 <div className="space-y-4">
                     {debate.options.map((opt: any, index: number) => (
-                        <div
+                        <VoteButton
                             key={opt._id.toString()}
-                            className="flex gap-4 items-start"
-                        >
-                            <div
-                                className="font-mono-numbers font-bold w-8 text-right pt-4"
-                                style={{
-                                    color: "var(--color-text-tertiary)",
-                                    fontSize: "var(--font-size-lg)",
-                                }}
-                            >
-                                #{index + 1}
-                            </div>
-                            <div className="flex-1">
-                                <VoteButton
-                                    debateId={debate._id}
-                                    optionId={opt._id.toString()}
-                                    optionName={opt.name}
-                                    initialVotes={opt.votes}
-                                    totalVotes={debate.totalVotes}
-                                />
-                            </div>
-                        </div>
+                            debateId={debate._id}
+                            optionId={opt._id.toString()}
+                            optionName={opt.name}
+                            initialVotes={opt.votes}
+                            totalVotes={debate.totalVotes}
+                            index={index}
+                        />
                     ))}
                 </div>
 

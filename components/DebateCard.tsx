@@ -5,7 +5,7 @@ import { Debate } from "@/lib/types";
 
 export default function DebateCard({ debate }: { debate: Debate }) {
     const d = debate;
-    const isTrending = d.totalVotes > 200;
+    const isTrending = d.totalVotes > 1000;
 
     return (
         <div
