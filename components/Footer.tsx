@@ -28,7 +28,7 @@ export default function Footer() {
                     </p>
                     <div className="flex gap-4">
                         <a
-                            href="#"
+                            href="https://x.com/mohdrafey72"
                             target="_blank"
                             rel="noreferrer"
                             className="hover:opacity-70 transition-opacity"
@@ -37,7 +37,7 @@ export default function Footer() {
                             <Twitter size={20} />
                         </a>
                         <a
-                            href="#"
+                            href="https://github.com/mohdrafey1"
                             target="_blank"
                             rel="noreferrer"
                             className="hover:opacity-70 transition-opacity"
@@ -46,7 +46,7 @@ export default function Footer() {
                             <Github size={20} />
                         </a>
                         <a
-                            href="#"
+                            href="https://www.linkedin.com/in/mohd-rafey"
                             target="_blank"
                             rel="noreferrer"
                             className="hover:opacity-70 transition-opacity"
@@ -116,7 +116,7 @@ export default function Footer() {
                     <ul className="space-y-2 text-sm">
                         <li>
                             <Link
-                                href="#"
+                                href="/about"
                                 className="hover:underline"
                                 style={{ color: "var(--color-text-secondary)" }}
                             >
@@ -125,7 +125,7 @@ export default function Footer() {
                         </li>
                         <li>
                             <Link
-                                href="#"
+                                href="/privacy-policy"
                                 className="hover:underline"
                                 style={{ color: "var(--color-text-secondary)" }}
                             >
@@ -134,7 +134,7 @@ export default function Footer() {
                         </li>
                         <li>
                             <Link
-                                href="#"
+                                href="/terms-of-service"
                                 className="hover:underline"
                                 style={{ color: "var(--color-text-secondary)" }}
                             >
