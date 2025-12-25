@@ -4,6 +4,7 @@ import Option from "@/models/Option";
 import DebateCard from "@/components/DebateCard";
 import Hero from "@/components/Hero";
 import Link from "next/link";
+import { getFeaturedCategories } from "@/lib/category-config";
 
 export const dynamic = "force-dynamic";
 
@@ -139,12 +140,13 @@ export default async function Home() {
                 </div>
 
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    {["Sports", "Technology", "Politics", "Entertainment"].map(
-                        (cat) => (
+                    {getFeaturedCategories().map((category) => {
+                        const Icon = category.icon;
+                        return (
                             <Link
-                                key={cat}
-                                href={`/category/${cat.toLowerCase()}`}
-                                className="p-6 text-center transition-all hover-accent-border"
+                                key={category.name}
+                                href={`/category/${category.name.toLowerCase()}`}
+                                className="group p-6 text-center transition-all hover-accent-border"
                                 style={{
                                     backgroundColor:
                                         "var(--color-base-surface)",
@@ -152,6 +154,18 @@ export default async function Home() {
                                     borderRadius: "var(--radius-sm)",
                                 }}
                             >
+                                <div
+                                    className="w-12 h-12 mx-auto mb-3 rounded-lg flex items-center justify-center transition-transform group-hover:scale-110"
+                                    style={{
+                                        backgroundColor: category.bgColor,
+                                    }}
+                                >
+                                    <Icon
+                                        size={24}
+                                        style={{ color: category.color }}
+                                        strokeWidth={2}
+                                    />
+                                </div>
                                 <h3
                                     className="font-medium"
                                     style={{
@@ -159,11 +173,11 @@ export default async function Home() {
                                         fontSize: "var(--font-size-base)",
                                     }}
                                 >
-                                    {cat}
+                                    {category.name}
                                 </h3>
                             </Link>
-                        )
-                    )}
+                        );
+                    })}
                 </div>
             </section>
         </div>
