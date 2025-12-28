@@ -14,6 +14,7 @@ export interface IDebate extends Document {
     rejectionReason?: string;
     createdAt: Date;
     updatedAt: Date;
+    tags?: string[];
 }
 
 const DebateSchema: Schema = new Schema(
@@ -34,6 +35,7 @@ const DebateSchema: Schema = new Schema(
         },
         createdBy: { type: String },
         rejectionReason: { type: String },
+        tags: { type: [String], index: true },
     },
     { timestamps: true }
 );

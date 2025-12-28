@@ -58,7 +58,7 @@ export async function POST(req: Request) {
         }
 
         const model = genAI.getGenerativeModel({
-            model: "gemini-flash-lite-latest",
+            model: "gemini-2.5-flash",
         });
 
         const systemPrompt = `

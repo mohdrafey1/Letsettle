@@ -65,7 +65,9 @@
 -   📊 **SEO Optimized** - Meta tags, OpenGraph, JSON-LD schema
 -   🗄️ **Database Indexes** - Optimized query performance
 -   🔐 **Input Validation** - Server and client-side validation
--   🧠 **AI Integration** - Google Gemini for content generation
+-   🧠 **AI Integration** - Google Gemini for content generation & auto-moderation
+-   🛡️ **Smart Categorization** - AI automatically categorizes and tags debates
+-   🔮 **Related Debates** - AI-driven recommendations for similar content
 
 ---
 
@@ -83,6 +85,14 @@ Letsettle includes a comprehensive moderation system to ensure high-quality deba
 -   Blocks excessive caps (max 50% uppercase)
 -   Prevents emoji-only submissions
 -   Detects spam patterns
+
+### AI Auto-Moderation (New)
+
+**Google Gemini** analyzes every submission for toxicity:
+
+-   **Approved**: Safe content goes live instantly.
+-   **Pending**: Toxic/Spam content waits for admin review.
+-   **Safety First**: Fail-safe mechanism ensures doubtful content is reviewed.
 
 ### Pre-Moderation Queue
 
@@ -258,6 +268,8 @@ NEXT_PUBLIC_APP_URL=https://yoursite.com
   totalVotes: number,        // Total vote count
   isActive: boolean,         // Can accept votes
   isMoreOptionAllowed: boolean, // Allow option suggestions
+  status: "pending" | "approved" | "rejected",
+  tags: string[],            // AI-generated tags (e.g. ["tech", "ai"])
   createdAt: Date,
   updatedAt: Date
 }
@@ -472,6 +484,7 @@ letsettle/
 │   ├── types.ts              # TypeScript types
 │   ├── constants.ts          # App constants
 │   ├── validators.ts         # Input validation
+│   ├── ai-moderator.ts       # AI Content Analysis
 │   └── adminAuth.ts          # Admin authentication
 ├── models/                   # Mongoose models
 │   ├── Debate.ts

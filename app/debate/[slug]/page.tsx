@@ -5,6 +5,7 @@ import VoteButton from "@/components/VoteButton";
 import AddOptionForm from "@/components/AddOptionForm";
 import ShareButton from "@/components/ShareButton";
 import AdminEditButton from "@/components/AdminEditButton";
+import RelatedDebates from "@/components/RelatedDebates";
 import { notFound } from "next/navigation";
 import { Metadata } from "next";
 import { formatDistanceToNow } from "date-fns";
@@ -23,7 +24,38 @@ async function getDebate(slug: string) {
         .sort({ votes: -1 })
         .lean();
 
-    return { ...debate, options, _id: debate._id.toString() };
+    // Note: getDebate runs on server component, but we need to fetch related debates.
+    // However, the related debates are fetched in the API route, but for the SERVER COMPONENT page load,
+    // we need to fetch them here or via an internal API call.
+    // Since we are inside a Server Component, we should just query the DB directly here too!
+
+    const relatedDebates = await Debate.find({
+        _id: { $ne: debate._id },
+        isActive: true,
+        status: "approved",
+        $or: [
+            { tags: { $in: debate.tags || [] } },
+            { category: debate.category },
+        ],
+    })
+        .sort({ totalVotes: -1, createdAt: -1 })
+        .limit(4)
+        .select("title slug category totalVotes createdAt tags")
+        .lean();
+
+    // Convert ObjectIds to strings for serialization
+    const serializedRelated = relatedDebates.map((d) => ({
+        ...d,
+        _id: d._id.toString(),
+        createdAt: d.createdAt.toISOString(),
+    }));
+
+    return {
+        ...debate,
+        options,
+        _id: debate._id.toString(),
+        relatedDebates: serializedRelated,
+    };
 }
 
 export async function generateMetadata({
@@ -193,6 +225,8 @@ export default async function DebatePage({ params }: PageProps) {
                     }),
                 }}
             />
+
+            <RelatedDebates debates={(debate as any).relatedDebates} />
         </div>
     );
 }

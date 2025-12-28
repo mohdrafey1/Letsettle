@@ -9,7 +9,7 @@ import {
     validateOptions,
     getUserIdentifier,
 } from "@/lib/validators";
-import { moderateContent } from "@/lib/ai-moderator";
+import { analyzeContent } from "@/lib/ai-moderator";
 
 export async function GET(request: NextRequest) {
     await dbConnect();
@@ -120,8 +120,8 @@ export async function POST(request: NextRequest) {
         // Get user identifier
         const createdBy = getUserIdentifier(request);
 
-        // Moderate content using AI
-        const initialStatus = await moderateContent(
+        // Analyze content using AI (Moderation + Tags)
+        const { status: initialStatus, tags } = await analyzeContent(
             title,
             description,
             options
@@ -135,6 +135,7 @@ export async function POST(request: NextRequest) {
                 category,
                 subCategory,
                 status: initialStatus, // Set status based on AI moderation
+                tags, // Add AI generated tags
                 createdBy,
             });
 
