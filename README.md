@@ -48,6 +48,8 @@
 -   🔍 **Search & Filter** - Find debates by category or keyword
 -   📄 **Pagination** - Browse large debate collections efficiently
 -   📊 **Sorting Options** - Sort by trending, newest, or most voted
+-   ✨ **AI Auto-fill** - Generate debate topics and options with Gemini AI
+-   🪄 **Magic UI** - Skeleton loaders and smooth animations
 
 ### Social Features
 
@@ -63,10 +65,11 @@
 -   📊 **SEO Optimized** - Meta tags, OpenGraph, JSON-LD schema
 -   🗄️ **Database Indexes** - Optimized query performance
 -   🔐 **Input Validation** - Server and client-side validation
+-   🧠 **AI Integration** - Google Gemini for content generation
 
 ---
 
-## �️ Content Moderation System
+## 🛡️ Content Moderation System
 
 Letsettle includes a comprehensive moderation system to ensure high-quality debates.
 
@@ -103,7 +106,7 @@ Access at `/admin` with full management capabilities:
 
 **Admin Features:**
 
--   ✅ Approve debates with one clickdebates with optional reason
+-   ✅ Approve debates with one click
 -   ✏️ Edit debate details (title, category, status, settings)
 -   🗑️ Delete debates (cascade deletes all options)
 -   🔍 Search & filter by status/category
@@ -127,7 +130,7 @@ Access at `/admin` with full management capabilities:
 
 ---
 
-## �🛠️ Tech Stack
+## 🛠️ Tech Stack
 
 ### Frontend
 
@@ -135,12 +138,14 @@ Access at `/admin` with full management capabilities:
 -   **Language**: [TypeScript](https://www.typescriptlang.org/)
 -   **Styling**: [Tailwind CSS](https://tailwindcss.com/) + CSS Variables
 -   **UI Components**: Custom components with Lucide icons
+-   **Animation**: [Framer Motion](https://www.framer.com/motion/)
 -   **Notifications**: [Sonner](https://sonner.emilkowal.ski/)
 
 ### Backend
 
 -   **Runtime**: Node.js (via Next.js API Routes)
 -   **Database**: [MongoDB](https://www.mongodb.com/) with Mongoose ODM
+-   **AI Model**: [Google Gemini](https://ai.google.dev/)
 -   **Fingerprinting**: Browser fingerprinting for vote tracking
 
 ### DevOps & Tools
@@ -212,6 +217,7 @@ Create a `.env.local` file in the root directory:
 ```env
 # Required
 MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/letsettle?retryWrites=true&w=majority
+GEMINI_API_KEY=your_gemini_api_key
 
 # Admin Authentication (Required for admin panel)
 ADMIN_USERNAME=admin
@@ -227,6 +233,7 @@ NEXT_PUBLIC_APP_URL=https://yoursite.com
 | Variable              | Description                 | Required           |
 | --------------------- | --------------------------- | ------------------ |
 | `MONGODB_URI`         | MongoDB connection string   | ✅ Yes             |
+| `GEMINI_API_KEY`      | Google Gemini API Key       | ✅ Yes             |
 | `ADMIN_USERNAME`      | Admin panel username        | ✅ Yes (for admin) |
 | `ADMIN_PASSWORD`      | Admin panel password        | ✅ Yes (for admin) |
 | `ADMIN_SECRET_TOKEN`  | Secret token for admin auth | ✅ Yes (for admin) |
