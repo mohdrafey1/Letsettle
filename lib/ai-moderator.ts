@@ -82,3 +82,55 @@ export async function analyzeContent(
         return { status: "pending", tags: [] };
     }
 }
+export async function analyzeOptionContent(
+    debateTitle: string,
+    debateDescription: string = "",
+    optionName: string
+): Promise<{ status: ModerationStatus; reason?: string }> {
+    if (!process.env.GEMINI_API_KEY) {
+        console.warn("GEMINI_API_KEY not set, defaulting to approved status");
+        return { status: "approved" };
+    }
+
+    try {
+        const model = genAI.getGenerativeModel({
+            model: "gemini-2.0-flash-lite",
+        });
+
+        const prompt = `
+            You are a moderator for a public debate platform.
+            Review if a user-suggested option is relevant and appropriate for the given debate.
+
+            Debate Topic: "${debateTitle}"
+            Debate Description: "${debateDescription}"
+            Suggested Option: "${optionName}"
+
+            Tasks:
+            1. Relevance: Is the option closely related to the debate topic? (e.g., "Apple" is relevant for "Best Smartphone", "Bananas" is NOT).
+            2. Safety: Is it safe (no hate speech, harassment, or profanity)?
+
+            Output Format (Strict JSON):
+            {
+                "moderation": "SAFE" | "TOXIC" | "IRRELEVANT" | "SPAM",
+                "reason": "Brief explanation if rejected"
+            }
+        `;
+
+        const result = await model.generateContent(prompt);
+        const data = JSON.parse(
+            result.response.text().match(/\{[\s\S]*\}/)?.[0] || "{}"
+        );
+
+        if (data.moderation === "SAFE") {
+            return { status: "approved" };
+        }
+
+        return {
+            status: "pending",
+            reason: data.reason || "Option rejected by AI moderator.",
+        };
+    } catch (error) {
+        console.error("Option Analysis Error:", error);
+        return { status: "approved" }; // Fail-safe: allow if AI fails
+    }
+}
