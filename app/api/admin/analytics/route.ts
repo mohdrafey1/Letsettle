@@ -7,6 +7,8 @@ import { requireAdmin } from "@/lib/adminAuth";
 import { startOfDay, subDays } from "date-fns";
 import mongoose from "mongoose";
 
+export const dynamic = "force-dynamic";
+
 // Helper to fill missing dates with 0
 const fillMissingDates = (
     data: { _id: string; count: number }[],
